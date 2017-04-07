@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='utf-8'?>
+<item xmlns="http://description.das.nara.gov/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <accessRestriction>
+        <accessRestrictionNote/>
+        <specificAccessRestrictionArray/>
+        <status>
+            <naId>10031403</naId>
+            <termName>Unrestricted</termName>
+        </status>
+        <statusProposal/>
+    </accessRestriction>
+    <accessionNumberArray/>
+    <accessionNumberProposalArray/>
+    <beginCongress/>
+    <beginCongressProposal/>
+    <copyrightDateArray/>
+    <coverageDates/>
+    <custodialHistoryNote/>
+    <dataControlGroup>
+        <groupCd>RDSS</groupCd>
+        <groupId>ou=NWCS-S,ou=groups</groupId>
+        <groupName/>
+        <groupRolesArray/>
+    </dataControlGroup>
+    <dateNote/>
+    <digitalObjectArray>
+        <digitalObject>
+            <accessFileSize>21380174</accessFileSize>
+            <accessFilename>https://nara-media.s3.amazonaws.com/stillpix/165-ww/Box195/Folder_A/165-ww-195A-068.jpg</accessFilename>
+            <labelFlag>165-ww/Box195/Folder_A/165-ww-195A-068.jpg</labelFlag>
+            <objectDescription/>
+            <objectIdentifier>31487491</objectIdentifier>
+            <objectType>
+                <naId>10052385</naId>
+                <termName>Image (JPG)</termName>
+            </objectType>
+            <thumbnailFileSize>1234</thumbnailFileSize>
+            <thumbnailFilename>https://media.nara.gov/dc-metro/jpg_t.jpg</thumbnailFilename>
+        </digitalObject>
+    </digitalObjectArray>
+    <endCongress/>
+    <endCongressProposal/>
+    <generalNoteArray/>
+    <generalRecordsTypeArray>
+        <generalRecordsType>
+            <naId>10035674</naId>
+            <termName>Photographs and other Graphic Materials</termName>
+        </generalRecordsType>
+    </generalRecordsTypeArray>
+    <generalRecordsTypeProposalArray/>
+    <geographicReferenceArray/>
+    <geographicReferenceProposalArray/>
+    <internalTransferNumberArray/>
+    <internalTransferNumberProposalArray/>
+    <isUnderEdit>false</isUnderEdit>
+    <languageArray/>
+    <languageProposalArray/>
+    <localIdentifier>165-WW-195A-68</localIdentifier>
+    <microformPublicationArray/>
+    <naId>31487490</naId>
+    <onlineResourceArray/>
+    <onlineResourceProposalArray/>
+    <organizationalContributorArray/>
+    <organizationalReferenceArray/>
+    <organizationalReferenceProposalArray/>
+    <otherTitleArray/>
+    <partnerObjectAvailabilityDate/>
+    <partyDesignation/>
+    <partyDesignationProposal/>
+    <personalContributorArray/>
+    <personalReferenceArray/>
+    <personalReferenceProposalArray/>
+    <physicalOccurrenceArray>
+        <itemPhysicalOccurrence>
+            <copyStatus>
+                <naId>10031434</naId>
+                <termName>Preservation-Reproduction-Reference</termName>
+            </copyStatus>
+            <copyStatusProposal/>
+            <locationArray>
+                <location>
+                    <facility>
+                        <naId>10048491</naId>
+                        <termName>National Archives at College Park - Archives II (College Park, MD)</termName>
+                    </facility>
+                    <facilityProposal/>
+                </location>
+            </locationArray>
+            <mediaOccurrenceArray>
+                <itemMediaOccurrence>
+                    <base/>
+                    <baseProposal/>
+                    <color/>
+                    <colorProposal/>
+                    <containerId>195</containerId>
+                    <dimension/>
+                    <dimensionProposal/>
+                    <emulsion/>
+                    <emulsionProposal/>
+                    <generalMediaTypeArray>
+                        <generalMediaType>
+                            <naId>12000010</naId>
+                            <termName>Photographic Materials</termName>
+                        </generalMediaType>
+                    </generalMediaTypeArray>
+                    <generalMediaTypeProposalArray/>
+                    <otherPreservationCharacteristicsArray/>
+                    <otherPreservationCharacteristicsProposalArray/>
+                    <process/>
+                    <processProposal/>
+                    <specificMediaType>
+                        <naId>10048292</naId>
+                        <termName>Photographic Print</termName>
+                    </specificMediaType>
+                    <specificMediaTypeProposal/>
+                </itemMediaOccurrence>
+            </mediaOccurrenceArray>
+            <referenceUnitArray>
+                <referenceUnit>
+                    <mailCode>RDSS</mailCode>
+                    <name>National Archives at College Park - Still Pictures</name>
+                    <address1>National Archives at College Park</address1>
+                    <address2>8601 Adelphi Road</address2>
+                    <city>College Park</city>
+                    <state>MD</state>
+                    <postCode>20740-6001</postCode>
+                    <phone>301-837-0561</phone>
+                    <fax>301-837-3621</fax>
+                    <email>stillpix@nara.gov</email>
+                    <naId>31</naId>
+                    <termName>National Archives at College Park - Still Pictures</termName>
+                </referenceUnit>
+            </referenceUnitArray>
+            <referenceUnitProposalArray/>
+        </itemPhysicalOccurrence>
+    </physicalOccurrenceArray>
+    <productionDateArray/>
+    <recordHistory>
+        <approved/>
+        <broughtUnderEdit/>
+        <changed/>
+        <created>
+            <dateTime>2016-06-07T15:11:49</dateTime>
+        </created>
+        <imported>
+            <dateTime>2016-06-07T15:11:49</dateTime>
+        </imported>
+        <projectName/>
+    </recordHistory>
+    <recordsCenterTransferNumberArray/>
+    <recordsCenterTransferNumberProposalArray/>
+    <scaleNote/>
+    <scopeAndContentNote>Date Taken: 1918</scopeAndContentNote>
+    <specialProjectArray/>
+    <specialProjectProposalArray/>
+    <specificRecordsTypeArray/>
+    <specificRecordsTypeProposalArray/>
+    <subtitle/>
+    <title>Industries of War - Cloth - Wool - American Woolen Co. - MAKING CLOTH FOR GOVERNMENT, AMERICAN WOOLEN CO., BOSTON</title>
+    <topicalSubjectArray>
+        <topicalSubject>
+            <recordHistory>
+                <created>
+                    <dateTime>2005-03-03T00:00:00</dateTime>
+                </created>
+                <changed>
+                    <modification>
+                        <dateTime>2013-02-28T00:00:00</dateTime>
+                    </modification>
+                </changed>
+            </recordHistory>
+            <naId>10646525</naId>
+            <termName>World War, 1914-1918</termName>
+        </topicalSubject>
+    </topicalSubjectArray>
+    <topicalSubjectProposalArray/>
+    <transferNote/>
+    <useRestriction>
+        <note/>
+        <specificUseRestrictionArray/>
+        <specificUseRestrictionProposalArray/>
+        <status>
+            <naId>10675400</naId>
+            <termName>Unrestricted</termName>
+        </status>
+        <statusProposal/>
+    </useRestriction>
+    <variantControlNumberArray>
+        <variantControlNumber>
+            <note/>
+            <number>165-WW Batch 5</number>
+            <type>
+                <naId>10675757</naId>
+                <termName>Search Identifier</termName>
+            </type>
+            <typeProposal/>
+        </variantControlNumber>
+    </variantControlNumberArray>
+    <guid/>
+    <parentFileUnit>
+        <naId>31200037</naId>
+        <title>Industries of War - Cloth - Wool - American Woolen Co.</title>
+        <parentSeries>
+            <naId>533461</naId>
+            <title>American Unofficial Collection of World War I Photographs</title>
+            <inclusiveDates>
+                <inclusiveEndDate>
+                    <year>1918</year>
+                    <logicalDate>1918-12-31T00:00:00</logicalDate>
+                </inclusiveEndDate>
+                <inclusiveStartDate>
+                    <year>1917</year>
+                    <logicalDate>1917-01-01T00:00:00</logicalDate>
+                </inclusiveStartDate>
+            </inclusiveDates>
+            <parentRecordGroup>
+                <naId>494</naId>
+                <title>Records of the War Department General and Special Staffs</title>
+                <recordGroupNumber>165</recordGroupNumber>
+                <inclusiveDates xmlns="http://description.das.nara.gov/">
+                    <inclusiveEndDate>
+                        <year>1952</year>
+                        <logicalDate>1952-12-31T00:00:00</logicalDate>
+                    </inclusiveEndDate>
+                    <inclusiveStartDate>
+                        <year>1860</year>
+                        <logicalDate>1860-01-01T00:00:00</logicalDate>
+                    </inclusiveStartDate>
+                </inclusiveDates>
+            </parentRecordGroup>
+            <formerCollectionArray/>
+            <formerRecordGroupArray/>
+            <creatingOrganizationArray>
+                <creatingOrganization>
+                    <creator>
+                        <naId>10461940</naId>
+                        <termName>War Department. 1789-9/18/1947</termName>
+                        <establishDate>
+                            <year>1789</year>
+                            <logicalDate>1789-01-01T00:00:00</logicalDate>
+                        </establishDate>
+                        <abolishDate>
+                            <year>1947</year>
+                            <month>9</month>
+                            <day>18</day>
+                            <logicalDate>1947-09-18T00:00:00</logicalDate>
+                        </abolishDate>
+                    </creator>
+                    <creatorType>
+                        <naId>10031465</naId>
+                        <termName>Most Recent</termName>
+                    </creatorType>
+                </creatingOrganization>
+            </creatingOrganizationArray>
+        </parentSeries>
+        <inclusiveDates xmlns="http://description.das.nara.gov/">
+            <inclusiveEndDate>
+                <dateQualifier xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                <dateQualifierProposal xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                <year>1918</year>
+                <logicalDate>1918-12-31T00:00:00</logicalDate>
+            </inclusiveEndDate>
+            <inclusiveEndDateCommentArray/>
+            <inclusiveStartDate>
+                <dateQualifier xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                <dateQualifierProposal xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                <year>1917</year>
+                <logicalDate>1917-01-01T00:00:00</logicalDate>
+            </inclusiveStartDate>
+            <inclusiveStartDateCommentArray/>
+        </inclusiveDates>
+    </parentFileUnit>
+</item>
