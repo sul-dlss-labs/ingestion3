@@ -27,11 +27,13 @@ libraryDependencies ++= Seq(
   "org.apache.httpcomponents" % "fluent-hc" % "4.5.2",
   // Enricher dependencies
   // TODO: reconcile with httpclient above.
+
   "org.jsoup" % "jsoup" % "1.10.2",
   "org.scalaj" %% "scalaj-http" % "2.3.0",
   "org.eclipse.rdf4j" % "rdf4j-model" % "2.2",
   "org.eclipse.rdf4j" % "rdf4j-rio-api" % "2.2",
   "org.eclipse.rdf4j" % "rdf4j-rio-turtle" % "2.2",
   "org.scalaj" % "scalaj-http_2.11" % "2.3.0",
-  "org.rogach" % "scallop_2.11" % "3.0.3"
+  "org.rogach" % "scallop_2.11" % "3.0.3",
+"org.apache.commons" % "commons-compress" % "1.13"
 )
