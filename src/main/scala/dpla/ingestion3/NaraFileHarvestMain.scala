@@ -43,7 +43,7 @@ object NaraFileHarvestMain {
     val outfile = args(2)
 
     Utils.deleteRecursively(new File(outfile))
-
+    val startTime = System.currentTimeMillis()
     val sparkConf = new SparkConf()
       .setAppName("NARA Harvest")
       .setMaster(master)
@@ -51,19 +51,25 @@ object NaraFileHarvestMain {
     val sc = spark.sparkContext
     import spark.implicits._
 
-    val strings  = sc.sequenceFile[String, String](infile)
-    val xml = strings.map(row => (row._1, Try(XML.loadString(new String(row._2))))).filter(row => row._2.isSuccess).map(row => (row._1, row._2.get))
+    val strings  = spark.read.avro(infile).rdd
+    val xml = strings.map(row => (row.getString(0), Try(XML.loadString(row.getString(1))))).filter(row => row._2.isSuccess).map(row => (row._1, row._2.get))
     val dosXml = xml.filter(row => (row._2 \\ "digitalObjectArray").nonEmpty)
     val items = dosXml.flatMap(row => row._2 \\ "item")
     val itemAvs = dosXml.flatMap(row => row._2 \\ "itemAv")
     val fileUnit = dosXml.flatMap(row => row._2 \\ "fileUnit")
     val allItems = sc.union(items, itemAvs, fileUnit)
     strings.unpersist(true)
-    allItems.persist(MEMORY_AND_DISK)
-    val doItems = allItems.filter(row => (row \\ "digitalObjectArray").nonEmpty)
+    val allRepartitioned = allItems.repartition(128)
+    allRepartitioned.persist(MEMORY_AND_DISK)
+    val doItems = allRepartitioned.filter(row => (row \\ "digitalObjectArray").nonEmpty)
     val doItemPairs = doItems.map( node => ((node \ "digitalObjectArray" \ "digitalObject" \ "objectIdentifier").headOption, node)).filter(row => row._1.isDefined).map(row => (row._1.get.text, row._2))
     val stringPairs: RDD[(String, String)] = doItemPairs.map(row => { (row._1, Utils.xmlToString(row._2))})
     stringPairs.toDF("id", "document").write.format("com.databricks.spark.avro").option("avroSchema", schemaStr).avro(outfile)
+    val recordCount = stringPairs.count()
+    sc.stop()
+    val endTime = System.currentTimeMillis()
+    Utils.printResults(endTime - startTime, recordCount)
+
   }
 
 }
