@@ -12,6 +12,8 @@ import org.apache.spark.storage.StorageLevel._
 import scala.util.Try
 import scala.xml.XML
 import com.databricks.spark.avro._
+import dpla.ingestion3.utils.MultiNodeSeq
+import org.apache.spark.storage.StorageLevel
 
 object NaraFileHarvestMain {
 
@@ -47,23 +49,14 @@ object NaraFileHarvestMain {
     val sparkConf = new SparkConf()
       .setAppName("NARA Harvest")
       .setMaster(master)
+
+    sparkConf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
+
     val spark: SparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
     val sc = spark.sparkContext
-    import spark.implicits._
-
-    val strings  = spark.read.avro(infile).rdd
-    val xml = strings.map(row => (row.getString(0), Try(XML.loadString(row.getString(1))))).filter(row => row._2.isSuccess).map(row => (row._1, row._2.get))
-    val dosXml = xml.filter(row => (row._2 \\ "digitalObjectArray").nonEmpty)
-    val items = dosXml.flatMap(row => row._2 \\ "item")
-    val itemAvs = dosXml.flatMap(row => row._2 \\ "itemAv")
-    val fileUnit = dosXml.flatMap(row => row._2 \\ "fileUnit")
-    val allItems = sc.union(items, itemAvs, fileUnit)
-    strings.unpersist(true)
-    val allRepartitioned = allItems.repartition(128)
-    allRepartitioned.persist(MEMORY_AND_DISK)
-    val doItems = allRepartitioned.filter(row => (row \\ "digitalObjectArray").nonEmpty)
-    val doItemPairs = doItems.map( node => ((node \ "digitalObjectArray" \ "digitalObject" \ "objectIdentifier").headOption, node)).filter(row => row._1.isDefined).map(row => (row._1.get.text, row._2))
-    val stringPairs: RDD[(String, String)] = doItemPairs.map(row => { (row._1, Utils.xmlToString(row._2))})
+    val strings = spark.read.avro(infile)
+    strings.persist(StorageLevel.MEMORY_AND_DISK)
+    val stringPairs = strings.flatMap(row => handleXmlFile(row.getString(0)))
     stringPairs.toDF("id", "document").write.format("com.databricks.spark.avro").option("avroSchema", schemaStr).avro(outfile)
     val recordCount = stringPairs.count()
     sc.stop()
@@ -71,5 +64,15 @@ object NaraFileHarvestMain {
     Utils.printResults(endTime - startTime, recordCount)
 
   }
+
+  import dpla.ingestion3.utils.MultiNodeSeq._
+
+  def handleXmlFile(xmlString: String): Seq[Tuple2[String, String]] = for {
+    xml <- XML.loadString(xmlString)
+    item <- xml \\ Seq("item", "itemAv", "fileUnit")
+    if (item \\ "digitalObjectArray").nonEmpty
+    id <- item \ "digitalObjectArray" \ "digitalObject" \ "objectIdentifier"
+    outputXML = Utils.xmlToString(item)
+  } yield (id.text, outputXML)
 
 }

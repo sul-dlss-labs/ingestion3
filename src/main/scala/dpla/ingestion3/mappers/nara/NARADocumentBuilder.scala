@@ -14,6 +14,9 @@ import scala.xml.XML
 
 class NARADocumentBuilder extends XmlExtractionUtils {
 
+  //Implicit that loops over multiple potential paths and returns their union
+
+  import dpla.ingestion3.utils.MultiNodeSeq._
 
   val urlPrefix = "http://catalog.archives.gov/id/"
 
@@ -260,15 +263,4 @@ class NARADocumentBuilder extends XmlExtractionUtils {
       Seq(useRestrictions, generalRights).filter(!_.isEmpty).mkString(": ")
     }
 
-  //helper to add navigating through a list of path options rather than one single path component
-  private[this]
-  class MultiNodeSeq(targetNodeSeq: NodeSeq) {
-    def \(thats: Iterable[String]): NodeSeq = {
-      (for (that <- thats) yield targetNodeSeq \ that).flatten.toSeq
-    }
-  }
-
-  //implicit makes the helper automatically work
-  private[this]
-  implicit def nodeSeqToMultiNodeSeq(targetNodeSeq: NodeSeq): MultiNodeSeq = new MultiNodeSeq(targetNodeSeq)
 }
