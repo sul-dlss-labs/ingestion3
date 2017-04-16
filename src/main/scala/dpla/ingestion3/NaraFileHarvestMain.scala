@@ -53,10 +53,11 @@ object NaraFileHarvestMain {
     sparkConf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
 
     val spark: SparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
+    import spark.implicits._
     val sc = spark.sparkContext
     val strings = spark.read.avro(infile)
     strings.persist(StorageLevel.MEMORY_AND_DISK)
-    val stringPairs = strings.flatMap(row => handleXmlFile(row.getString(0)))
+    val stringPairs = strings.flatMap(row => handleXmlFile(row.getString(1)))
     stringPairs.toDF("id", "document").write.format("com.databricks.spark.avro").option("avroSchema", schemaStr).avro(outfile)
     val recordCount = stringPairs.count()
     sc.stop()
