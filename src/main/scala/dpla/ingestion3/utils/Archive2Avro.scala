@@ -38,7 +38,7 @@ class Archive2Avro {
   def getAvroWriter(outputFile: File): DataFileWriter[GenericRecord] = {
     val datumWriter = new GenericDatumWriter[GenericRecord](schema)
     val dataFileWriter = new DataFileWriter[GenericRecord](datumWriter)
-    dataFileWriter.setCodec(CodecFactory.deflateCodec(CodecFactory.DEFAULT_DEFLATE_LEVEL))
+    dataFileWriter.setCodec(CodecFactory.deflateCodec(1))
     dataFileWriter.create(schema, outputFile)
   }
 
