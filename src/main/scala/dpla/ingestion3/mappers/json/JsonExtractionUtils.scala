@@ -1,8 +1,8 @@
 package dpla.ingestion3.mappers.json
 
-
 import org.json4s.JValue
 import org.json4s.JsonAST._
+import org.json4s.jackson.JsonMethods._
 
 /**
   * Utils to help extract data from JSON documents.
@@ -70,5 +70,14 @@ trait JsonExtractionUtils {
     case JString(string) => Some(string)
     case _ => None
   }
+
+  /**
+    * Properly formats the JSON so it is more human readable
+    *
+    * @param jValue - The JSON object
+    * @return String - A formatted string representation of
+    *         the JSON object
+    */
+  def prettifiy(jValue: JValue): String = pretty(render(jValue))
 
 }

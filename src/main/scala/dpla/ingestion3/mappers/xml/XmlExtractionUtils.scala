@@ -44,4 +44,17 @@ trait XmlExtractionUtils {
       case _ => Seq()
     }
   }
+
+  /**
+    * Properly formats the XML so it is more human readable
+    *
+    * @param xValue - XML object
+    * @return String
+    */
+  def prettify(xValue: NodeSeq): String = {
+    val printFormat = new scala.xml.PrettyPrinter(80, 4)
+    val sb = new StringBuilder
+    xValue.foreach(x => printFormat.format(x, scala.xml.TopScope, sb))
+    sb.toString()
+  }
 }
