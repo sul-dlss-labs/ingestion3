@@ -45,7 +45,7 @@ class CdlExtractor(rawData: String) extends Extractor with JsonExtractionUtils {
         OreAggregation(
           uri = mintDplaItemUri(),
           dataProvider = nameOnlyAgent(provider(json)),
-          originalRecord = rawData,
+          originalRecord = prettifiy(json),
           preview = thumbnail(json),
           provider = agent
         )

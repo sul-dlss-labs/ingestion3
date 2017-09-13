@@ -79,7 +79,7 @@ class PaExtractor(rawData: String) extends Extractor with XmlExtractionUtils {
         uri = mintDplaItemUri(),
         //below will throw if not enough contributors
         dataProvider = dataProvider(),
-        originalRecord = rawData,
+        originalRecord = prettify(xml),
         provider = agent,
         preview = thumbnail
         // TODO what about `object` in this context? Assume no implementation

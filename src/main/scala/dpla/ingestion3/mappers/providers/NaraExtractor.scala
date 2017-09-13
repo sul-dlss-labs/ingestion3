@@ -48,7 +48,7 @@ class NaraExtractor(rawData:String) extends Extractor with XmlExtractionUtils wi
         OreAggregation(
           uri = itemUri(xml), //this should probably be renamed to isShownAt
           dataProvider = dataProvider(xml),
-          originalRecord = rawData,
+          originalRecord = prettify(xml),
           provider = agent,
           preview = extractString("thumbnailFilename").map(new URI(_)).map(uriOnlyWebResource)
         )
