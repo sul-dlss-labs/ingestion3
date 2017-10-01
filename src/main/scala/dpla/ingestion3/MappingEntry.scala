@@ -57,9 +57,8 @@ object MappingEntry {
     mappingLogger.addAppender(appender)
 
     // Log config file location and provider short name.
-    mappingLogger.info(s"Mapping initiated")
-    mappingLogger.info(s"Config file: ${confFile}")
-    mappingLogger.info(s"Provider short name: ${shortName}")
+    mappingLogger.info(s"Configuration file:  $confFile")
+    mappingLogger.info(s"Provider short name: $shortName")
 
     // Load configuration from file.
     val i3Conf = new Ingestion3Conf(confFile, Some(shortName))
@@ -69,7 +68,7 @@ object MappingEntry {
     val sparkMaster = conf.spark.sparkMaster.getOrElse("local[1]")
 
     val sparkConf = new SparkConf()
-      .setAppName(s"Mapping: ${shortName}")
+      .setAppName(s"Mapping: $shortName")
       .setMaster(sparkMaster)
 
     val spark = SparkSession.builder()
@@ -121,7 +120,7 @@ object MappingEntry {
 
 
     // Summarize results
-    mappingSummary(harvestedRecords.count(), successResults.count(), failures, dataOut, shortName)
+    mappingSummary(harvestedRecords.count(), successResults.count(), failures, dataOut, shortName, mappingLogger)
 
     spark.stop()
   }
@@ -133,27 +132,29 @@ object MappingEntry {
     }
 
   /**
-    * Print mapping summary information
+    * Print mapping summary information and write error messages to log file
     *
-    * @param harvestCount
-    * @param mapCount
-    * @param errors
-    * @param outDir
-    * @param shortName
+    * @param harvestCount Number of harvested records
+    * @param mapCount Number of mapped records
+    * @param errors List of error messages
+    * @param outDir Output directory
+    * @param shortName Provider shortname
     */
   def mappingSummary(harvestCount: Long,
                      mapCount: Long,
                      errors: Array[String],
                      outDir: String,
-                     shortName: String): Unit = {
+                     shortName: String,
+                     logger: Logger): Unit = {
     val logDir = new File(s"$outDir/logs/")
     logDir.mkdirs()
+    val msg = s"Results: \n\n\tStarted with: ${Utils.prettyPrintLong(harvestCount)} records\n" +
+                s"\tMapped:       ${Utils.prettyPrintLong(mapCount)} records\n" +
+                s"\tFailed:       ${Utils.prettyPrintLong(harvestCount - mapCount)} records\n" +
+                s"\t-- See ${logDir.getAbsolutePath} for error messages."
 
-    println(s"Harvested $harvestCount records")
-    println(s"Mapped ${mapCount} records")
-    println(s"Failed to map ${harvestCount - mapCount} records.")
-    if (mapCount != harvestCount)
-      println(s"Saving error log to ${logDir.getAbsolutePath}")
+    logger.info(msg)
+
     val pw = new PrintWriter(
       new File(s"${logDir.getAbsolutePath}/$shortName-mapping-errors-${System.currentTimeMillis()}.log"))
     errors.foreach(f => pw.write(s"$f\n"))

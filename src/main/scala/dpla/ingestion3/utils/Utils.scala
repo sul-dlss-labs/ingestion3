@@ -73,11 +73,12 @@ object Utils {
     // add 1 to avoid divide by zero error
     val recordsPerSecond: Long = recordCount/runtimeInSeconds
 
-    logger.info(s"Record count: ${formatter.format(recordCount)}")
-    logger.info(s"Runtime: $minutes:$seconds")
-    logger.info(s"Throughput: ${formatter.format(recordsPerSecond)} records/second")
-  }
+    val msg = s"Results: \n\n\tRecord count: ${formatter.format(recordCount)}\n" +
+              s"\tRuntime:      $minutes:$seconds\n" +
+              s"\tThroughput:   ${formatter.format(recordsPerSecond)} records per second"
 
+    logger.info(msg)
+  }
 
   /**
     * Delete a directory
@@ -104,33 +105,6 @@ object Utils {
   }
 
   /**
-    * Print the results of a harvest
-    *
-    * Example:
-    *   Harvest count: 242924 records harvested
-    *   Runtime: 4 minutes 24 seconds
-    *   Throughput: 920 records/second
-    *
-    * @param runtime Runtime in milliseconds
-    * @param recordsHarvestedCount Number of records in the output directory
-    */
-
-  def printResults(runtime: Long, recordsHarvestedCount: Long): Unit = {
-    // Make things pretty
-    val formatter = java.text.NumberFormat.getIntegerInstance
-    val minutes: Long = TimeUnit.MILLISECONDS.toMinutes(runtime)
-    val seconds: Long = TimeUnit.MILLISECONDS.toSeconds(runtime) -
-      TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(runtime))
-    val runtimeInSeconds: Long = TimeUnit.MILLISECONDS.toSeconds(runtime) + 1
-    // add 1 to avoid divide by zero error
-    val recordsPerSecond: Long = recordsHarvestedCount/runtimeInSeconds
-
-    println(s"\n\nFile count: ${formatter.format(recordsHarvestedCount)}")
-    println(s"Runtime: $minutes:$seconds")
-    println(s"Throughput: ${formatter.format(recordsPerSecond)} records/second")
-  }
-
-  /**
     * Uses runtime information to create a log4j file appender.
     *
     * @param provider - Name partner
@@ -149,5 +123,17 @@ object Utils {
       layout,
       s"log/${provider}-${process}-${date}.log",
       true)
+  }
+
+  /**
+    * Formats value with commas
+    * e.g. 2342342 > 2,342,342
+    *
+    * @param i Long value to format
+    * @return Long value formatted with comma seperation
+    */
+  def prettyPrintLong(i: Long) = {
+    val formatter = java.text.NumberFormat.getIntegerInstance
+    formatter.format(i)
   }
 }

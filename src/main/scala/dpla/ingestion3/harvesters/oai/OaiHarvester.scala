@@ -50,8 +50,6 @@ class OaiHarvester(shortName: String,
       .withColumn("provider", lit(shortName))
       .withColumn("mimetype", lit(mimeType))
 
-    harvestLogger.info(s"Saving output to ${outputDir}")
-
     // Write harvested data to file.
     finalData
       .write

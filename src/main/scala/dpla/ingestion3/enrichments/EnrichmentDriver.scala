@@ -34,11 +34,18 @@ class EnrichmentDriver(conf: i3Conf) extends Serializable {
     * @return An enriched record
     */
   def enrich(record: OreAggregation): Try[OreAggregation] = Try {
+    /**
+      * Notes on geo code runtime for PA
+      *
+      * 2 minutes w/o geocode
+      * 7 hours with geocode using geo-prod from local
+      * 35 minutes with geocode using localhost
+      */
     record.copy(
       sourceResource = record.sourceResource.copy(
         date = record.sourceResource.date.map(d => dateEnrichment.parse(d)),
-        language = record.sourceResource.language.map(l => LanguageMapper.mapLanguage(l)),
-        place = record.sourceResource.place.map(p => spatialEnrichment.enrich(p))
+        language = record.sourceResource.language.map(l => LanguageMapper.mapLanguage(l))
+        ,place = record.sourceResource.place.map(p => spatialEnrichment.enrich(p))
       ))
   }
 }

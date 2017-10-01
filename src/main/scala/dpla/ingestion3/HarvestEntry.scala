@@ -39,9 +39,8 @@ object HarvestEntry {
     harvestLogger.addAppender(appender)
 
     // Log config file location and provider short name.
-    harvestLogger.info(s"Harvest initiated")
-    harvestLogger.info(s"Config file: ${confFile}")
-    harvestLogger.info(s"Provider short name: ${shortName}")
+    // harvestLogger.info(s"Using configuration: s$confFile")
+    // harvestLogger.info(s"Provider: $shortName")
 
     // Load configuration from file.
     val i3Conf = new Ingestion3Conf(confFile, Some(shortName))
@@ -51,7 +50,7 @@ object HarvestEntry {
     val harvestType = providerConf.harvest.harvestType
       .getOrElse(throw new RuntimeException("No harvest type specified."))
 
-    harvestLogger.info(s"Harvest type: ${harvestType}")
+    harvestLogger.info(s"Harvest type: $harvestType")
 
     // Execute harvest.
     executeHarvest(harvestType, shortName, outputDir, providerConf, harvestLogger)

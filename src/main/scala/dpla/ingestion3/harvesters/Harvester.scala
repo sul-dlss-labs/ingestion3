@@ -57,11 +57,11 @@ abstract class Harvester(shortName: String,
     // TODO Move this into a shell script
     outputFile.getParentFile.mkdirs()
     if (outputFile.exists & !outputDir.startsWith("s3"))
-      harvestLogger.info(s"Output directory already exists. Deleting ${outputDir}...")
+      harvestLogger.info(s"Deleting $outputDir...")
       Utils.deleteRecursively(outputFile)
 
     // Log message that harvest is starting.
-    harvestLogger.info(s"Beginning ${shortName} harvest")
+    harvestLogger.info(s"Running $shortName harvest...")
     val startTime = System.currentTimeMillis()
 
     // Call local implementation.
@@ -70,7 +70,6 @@ abstract class Harvester(shortName: String,
       case Success(df) =>
         // Log details about the successful harvest.
         val endTime = System.currentTimeMillis()
-        harvestLogger.info(s"Records saving to ${outputDir}")
         Utils.logResults(endTime-startTime, df.count(), harvestLogger)
         validateSchema(df)
 

@@ -112,8 +112,9 @@ object EnrichEntry {
     // Log error messages.
     failures.foreach(msg => enrichLogger.warn(s"Error: ${msg}"))
 
-    enrichLogger.debug(s"Mapped ${mappedRecordCount} records and enriched ${enrichedRecordCount} records")
-    enrichLogger.debug(s"${mappedRecordCount-enrichedRecordCount} enrichment errors")
+    enrichLogger.info(s"Results: \n\n\tStarted with:    ${Utils.prettyPrintLong(mappedRecordCount)} records\n" +
+                       s"\tEnriched:         ${Utils.prettyPrintLong(enrichedRecordCount)} records\n" +
+                       s"\tFailed:           ${Utils.prettyPrintLong(mappedRecordCount-enrichedRecordCount)}")
   }
 
   private def enrich(dplaMapData: OreAggregation, driver: EnrichmentDriver): (Row, String) = {
@@ -132,8 +133,10 @@ object EnrichEntry {
   private def pingTwofishes(conf: i3Conf) = {
     val host = conf.twofishes.hostname.getOrElse("localhost")
     val port = conf.twofishes.port.getOrElse("8081")
-    Utils.validateUrl(s"http://${host}:${port}/query") match {
-      case false => throw new RuntimeException(s"Cannot reach Twofishes at ${host}")
+    val url = s"http://${host}:${port}/query"
+    Utils.validateUrl(url) match {
+      case true => // Do nothing. Maybe log something?
+      case false => throw new RuntimeException(s"Cannot reach Twofishes at ${url}")
     }
   }
 }
