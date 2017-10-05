@@ -38,7 +38,7 @@ class NaraExtractor(rawData: String, shortName: String) extends Extractor with X
           date = date(xml),
           description = extractStrings("scopeAndContentNote"),
           extent = extractStrings("extent"),
-          format = extractStrings(xml \\ "specificRecordsTypeArray" \ "specificRecordsType" \ "termName"),
+          format = format(xml),
           identifier = extractStrings("naId"),
           language = extractStrings(xml \\ "languageArray" \ "language" \ "termName").map(nameOnlyConcept),
           place =
@@ -54,7 +54,8 @@ class NaraExtractor(rawData: String, shortName: String) extends Extractor with X
         originalRecord = rawData,
         provider = agent,
         isShownAt = uriOnlyWebResource(itemUri(xml)),
-        preview = extractString(xml \ "digitalObjectArray" \ "digitalObject" \ "thumbnailFilename").map(new URI(_)).map(uriOnlyWebResource)
+        preview = extractStrings(xml \ "digitalObjectArray" \ "digitalObject" \ "thumbnailFilename").headOption
+          .map(new URI(_)).map(uriOnlyWebResource)
       )
     }
   }
@@ -64,9 +65,13 @@ class NaraExtractor(rawData: String, shortName: String) extends Extractor with X
     uri = Some(new URI("http://dp.la/api/contributor/nara"))
   )
 
+  def format(xml: NodeSeq): Seq[String] =
+    extractStrings(xml \\ "specificRecordsTypeArray" \ "specificRecordsType" \ "termName") ++
+      extractStrings(xml \\ "mediaOccurrenceArray" \ "itemMediaOccurrence" \ "specificMediaType" \ "termName")
+
   def collection(xml: NodeSeq): Seq[String] = {
     val parentRecordGroupIds = for {
-      prg <- xml \ "parentRecordGroup"
+      prg <- xml \\ "parentRecordGroup"
       prgId <- prg \ "naId" :: prg \ "title" :: prg \ "recordGroupNumber" :: Nil
     } yield prgId.text
 
@@ -81,13 +86,16 @@ class NaraExtractor(rawData: String, shortName: String) extends Extractor with X
   def contributor(xml: NodeSeq): Seq[String] = {
 
     //TODO: not handling multiple display values. haven't found example yet.
+    //<contributingOrganizationArray><contributingOrganization><contributorType>
 
     val organizationalContributors = for {
       org <- xml \\ "organizationalContributorArray" \ "organizationalContributor"
-      name = (org \ "contributor" \ "termName").text
-      _type = (org \ "contributorType" \ "termName").text
-      if _type != "Publisher"
-    } yield name
+      contributor = (org \ "contributor" \ "termName").text
+      contributorType = (org \ "contributorType" \ "termName").text
+      if contributorType != "Publisher"
+      // todo are contributing organizations the same as creating orgs? they don't appear to be
+      // because of this Publisher thing
+    } yield contributor
 
     val personalContributors = for {
       person <- xml \\ "personalContributorArray" \ "personalContributor"
@@ -101,15 +109,28 @@ class NaraExtractor(rawData: String, shortName: String) extends Extractor with X
   def creator(xml: NodeSeq): Seq[String] = {
 
     //TODO: not handling multiple display values. haven't found example yet.
-    val organizationalCreators = for (
-      name <- xml \\ "creatingOrganizationArray" \ "creatingOrganization" \ "creator" \ "termName"
-    ) yield name.text
+    val organizationalCreators =
+      for {
+        creatingOrganization <- xml \\ "creatingOrganizationArray" \ "creatingOrganization"
+        creator = (creatingOrganization \ "creator" \ "termName").headOption.map(_.text)
+        creatorType = (creatingOrganization \ "creatorType" \ "termName").headOption.map(_.text)
+      } yield (creator, creatorType)
 
-    val individualCreators = for (
-      name <- xml \\ "creatingIndividualArray" \ "creatingIndividual" \ "creator" \ "termName"
-    ) yield name.text
+    val individualCreators = for {
+      creator <- xml \\ "creatingIndividualArray" \ "creatingIndividual" \ "creator" \ "termName"
+    } yield creator.text
 
-    if (organizationalCreators.nonEmpty) organizationalCreators else individualCreators
+    if (organizationalCreators.size == 1)
+      organizationalCreators.head._2.toSeq
+    else if (organizationalCreators.nonEmpty)
+      for {
+        organizationalCreator <- organizationalCreators
+        creator <- organizationalCreator._1
+        creatorType <- organizationalCreator._2
+        if creatorType == "Most Recent"
+      } yield creator
+    else
+      individualCreators
   }
 
   def date(xml: NodeSeq): Seq[EdmTimeSpan] = {
@@ -225,8 +246,8 @@ class NaraExtractor(rawData: String, shortName: String) extends Extractor with X
     val referenceUnit = (for {
       itemPhysicalOccurrence <- xml \ "physicalOccurrenceArray" \ "itemPhysicalOccurrence"
       copyStatus = (itemPhysicalOccurrence \ "copyStatus" \ "termName").text
-      if copyStatus == "Reproduction-Reference" || copyStatus == "Preservation"
-      referenceUnit = (itemPhysicalOccurrence \ "referenceUnit" \ "termName").text
+      if copyStatus.contains("Reproduction-Reference") || copyStatus.contains("Preservation")
+      referenceUnit = (itemPhysicalOccurrence \ "referenceUnitArray" \ "referenceUnit" \ "termName").text
     } yield referenceUnit).headOption
 
     nameOnlyAgent(referenceUnit.getOrElse("National Records and Archives Administration"))
@@ -237,18 +258,18 @@ class NaraExtractor(rawData: String, shortName: String) extends Extractor with X
 object NaraTypeVocabEnforcer extends VocabEnforcer[String] {
   val dcmiTypes = DCMIType()
   val naraVocab: Map[String, IRI] = Map(
-    "Architectural and Engineering Drawings" -> dcmiTypes.Image,
-    "Artifacts" -> dcmiTypes.PhysicalObject,
-    "Data Files" -> dcmiTypes.Dataset,
-    "Maps and Charts" -> dcmiTypes.Image,
-    "Moving Images" -> dcmiTypes.MovingImage,
-    "Photographs and Other Graphic Materials" -> dcmiTypes.Image,
-    "Sound Recordings" -> dcmiTypes.Sound,
-    "Textual Records" -> dcmiTypes.Text,
-    "Web Pages" -> dcmiTypes.InteractiveResource
+    "architectural and engineering drawings" -> dcmiTypes.Image,
+    "artifacts" -> dcmiTypes.PhysicalObject,
+    "data files" -> dcmiTypes.Dataset,
+    "maps and charts" -> dcmiTypes.Image,
+    "moving images" -> dcmiTypes.MovingImage,
+    "photographs and other graphic materials" -> dcmiTypes.Image,
+    "sound recordings" -> dcmiTypes.Sound,
+    "textual records" -> dcmiTypes.Text,
+    "web pages" -> dcmiTypes.InteractiveResource
   ) ++ DcmiTypeMapper.DcmiTypeMap
 
-  def mapNaraType(value: String): Option[IRI] = mapVocab(value, naraVocab)
+  def mapNaraType(value: String): Option[IRI] = mapVocab(value.toLowerCase, naraVocab)
 
 }
 
