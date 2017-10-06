@@ -49,10 +49,9 @@ class NaraExtractorTest extends FlatSpec with BeforeAndAfter {
     assert(collections === Seq("424", "Records of the Forest Service", "95"))
   }
 
-  //todo add contributors to test data
   it should "extract contributors" in {
     val contributors = extractor.contributor(xml)
-    assert(contributors === Seq())
+    assert(contributors === Seq("Department of the Navy. Fourteenth Naval District. Naval Air Station, Pearl Harbor (Hawaii). ca. 1940-9/1947"))
   }
 
   it should "extract creators" in {
@@ -71,10 +70,9 @@ class NaraExtractorTest extends FlatSpec with BeforeAndAfter {
     assert(descriptions === Seq("Original caption: Aerial view of Silver Island Lake, from inlet, looking north, with Perent Lake in background."))
   }
 
-  //todo add extents to test data
   it should "extract extents" in {
     val extents = build().sourceResource.extent
-    assert(extents === Seq())
+    assert(extents === Seq("14 pages"))
   }
 
   it should "extract formats" in {
@@ -87,10 +85,9 @@ class NaraExtractorTest extends FlatSpec with BeforeAndAfter {
     assert(identifiers === Seq("2132862"))
   }
 
-  //todo find test data with languages
   it should "extract languages" in {
     val languages = build().sourceResource.language
-    assert(languages === Seq())
+    assert(languages === Seq(nameOnlyConcept("Japanese")))
   }
 
   it should "extract places" in {
@@ -98,7 +95,7 @@ class NaraExtractorTest extends FlatSpec with BeforeAndAfter {
     assert(places === Seq(nameOnlyPlace("Superior National Forest (Minn.)")))
   }
 
-  //todo add publishers to test data
+  //todo can't find publishers
   it should "extract publishers" in {
     val publishers = extractor.publisher(xml)
     assert(publishers === Seq())
