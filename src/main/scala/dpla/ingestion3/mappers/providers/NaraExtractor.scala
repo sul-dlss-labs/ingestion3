@@ -37,7 +37,7 @@ class NaraExtractor(rawData: String, shortName: String) extends Extractor with X
           creator = creator(xml).map(nameOnlyAgent),
           date = date(xml),
           description = extractStrings("scopeAndContentNote"),
-          extent = extractStrings("extent"),
+          extent = extractStrings(xml \ "physicalOccurrenceArray" \\ "extent"),
           format = format(xml),
           identifier = extractStrings("naId"),
           language = extractStrings(xml \\ "languageArray" \ "language" \ "termName").map(nameOnlyConcept),
