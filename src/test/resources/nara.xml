@@ -54,14 +54,53 @@
         </geographicPlaceName>
     </geographicReferenceArray>
     <isUnderEdit>false</isUnderEdit>
+    <languageArray>
+        <language>
+            <naId>10048776</naId>
+            <termName>Japanese</termName>
+        </language>
+    </languageArray>
     <localIdentifier>517805</localIdentifier>
     <naId>2132862</naId>
+    <organizationalContributorArray>
+        <organizationalContributor>
+            <contributor>
+                <recordHistory>
+                    <created>
+                        <dateTime>2004-10-19T00:00:00</dateTime>
+                    </created>
+                    <changed>
+                        <modification>
+                            <dateTime>2006-05-04T00:00:00</dateTime>
+                        </modification>
+                    </changed>
+                </recordHistory>
+                <establishDate>
+                    <year>1940</year>
+                    <dateQualifier/>
+                    <logicalDate>1940-01-01T00:00:00</logicalDate>
+                </establishDate>
+                <abolishDate>
+                    <year>1947</year>
+                    <month>9</month>
+                    <logicalDate>1947-09-30T00:00:00</logicalDate>
+                </abolishDate>
+                <naId>10461226</naId>
+                <termName>Department of the Navy. Fourteenth Naval District. Naval Air Station, Pearl Harbor (Hawaii). ca. 1940-9/1947</termName>
+            </contributor>
+            <contributorType>
+                <naId>10030644</naId>
+                <termName>Photographer</termName>
+            </contributorType>
+        </organizationalContributor>
+    </organizationalContributorArray>
     <physicalOccurrenceArray>
         <itemPhysicalOccurrence>
             <copyStatus>
                 <naId>10031434</naId>
                 <termName>Preservation-Reproduction-Reference</termName>
             </copyStatus>
+            <extent>14 pages</extent>
             <referenceUnitArray>
                 <referenceUnit>
                     <mailCode>RM-CH</mailCode>
