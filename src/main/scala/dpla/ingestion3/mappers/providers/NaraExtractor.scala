@@ -246,8 +246,9 @@ class NaraExtractor(rawData: String, shortName: String) extends Extractor with X
     val referenceUnit = (for {
       itemPhysicalOccurrence <- xml \ "physicalOccurrenceArray" \ "itemPhysicalOccurrence"
       copyStatus = (itemPhysicalOccurrence \ "copyStatus" \ "termName").text
+
       if copyStatus.contains("Reproduction-Reference") || copyStatus.contains("Preservation")
-      referenceUnit = (itemPhysicalOccurrence \ "referenceUnitArray" \ "referenceUnit" \ "termName").text
+      referenceUnit = (itemPhysicalOccurrence \\ "referenceUnitArray" \ "referenceUnit" \ "termName").text
     } yield referenceUnit).headOption
 
     nameOnlyAgent(referenceUnit.getOrElse("National Records and Archives Administration"))
