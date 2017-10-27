@@ -44,7 +44,8 @@ class MdlExtractor(rawData: String, shortName: String) extends Extractor with Js
         ),
         dataProvider = dataProvider(json \\ "record" \ "dataProvider"),
         originalRecord = rawData,
-        isShownAt = uriOnlyWebResource(uri(json)),
+        //TODO this is probably wrong, needs to dig down into the json
+        isShownAt = uriOnlyWebResource(extractUri(json)),
         preview = thumbnail(json \\ "record" \ "object"),
         provider = agent
       )
@@ -91,20 +92,18 @@ class MdlExtractor(rawData: String, shortName: String) extends Extractor with Js
 
   def thumbnail(thumbnail: JValue): Option[EdmWebResource] =
     extractString(thumbnail) match {
-      case Some(t) => Some(
-        uriOnlyWebResource(new URI(t))
-      )
+      case Some(t) => uri(t).map(uriOnlyWebResource)
       case None => None
     }
 
   def agent = EdmAgent(
     name = Some("Minnesota Digital Library"),
-    uri = Some(new URI("http://dp.la/api/contributor/mdl"))
+    uri = uri("http://dp.la/api/contributor/mdl")
   )
 
-  def uri(uri: JValue): URI = {
+  def extractUri(uri: JValue): URI = {
     extractString(uri) match {
-      case Some(t) => new URI(t)
+      case Some(t) => super.uri(t).getOrElse(throw new RuntimeException(s"isShownAt is missing. Cannot map record."))
       case _ => throw new RuntimeException(s"isShownAt is missing. Cannot map record.")
     }
   }

@@ -35,7 +35,7 @@ class PaExtractor(rawData: String, shortName: String) extends Extractor with Xml
   def itemUri(): ExactlyOne[URI] = {
     val ids = extractStrings(xml \ "metadata" \\ "identifier")
     if (ids.size >= 2)
-      new URI(ids(1))
+      uri(ids(1)).getOrElse(throw new Exception(s"dc:identifier does not occur at least twice for: ${getProviderId()}"))
     else
       throw new Exception(s"dc:identifier does not occur at least twice for: ${getProviderId()}")
   }
@@ -75,7 +75,7 @@ class PaExtractor(rawData: String, shortName: String) extends Extractor with Xml
 
   def agent = EdmAgent(
     name = Some("Pennsylvania Digital Collections Project"),
-    uri = Some(new URI("http://dp.la/api/contributor/pa"))
+    uri = uri("http://dp.la/api/contributor/pa")
   )
 
   // Get the last occurrence of the identifier property, there
@@ -84,7 +84,7 @@ class PaExtractor(rawData: String, shortName: String) extends Extractor with Xml
   def thumbnail(): ZeroToOne[EdmWebResource] = {
     val ids = extractStrings(xml \ "metadata" \\ "identifier")
     if (ids.size > 2)
-      Option(uriOnlyWebResource(new URI(ids.last)))
+      uri(ids.last).map(uriOnlyWebResource)
     else
       None
   }

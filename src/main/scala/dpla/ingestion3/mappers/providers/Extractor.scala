@@ -94,7 +94,10 @@ trait Extractor {
     *
     * @return URI
     */
-  protected def mintDplaItemUri(): URI = new URI(s"$baseDplaItemUri${mintDplaId()}")
+  protected def mintDplaItemUri(): URI = uri("$baseDplaItemUri${mintDplaId()}").getOrElse(throw new RuntimeException("Unable to mint DPLA item URI."))
+
+  def uri(uriString: String):Option[URI] = Try { new URI(uriString) }.toOption
+
 }
 
 case class ExtractorException(message: String) extends Exception(message)

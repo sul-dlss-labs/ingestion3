@@ -25,7 +25,8 @@ class NaraExtractor(rawData: String, shortName: String) extends Extractor with X
   override def getProviderId(): String = itemUri.toString
 
   def itemUri(implicit xml: NodeSeq): URI =
-    extractString("naId").map(naId => new URI("http://catalog.archives.gov/id/" + naId))
+    extractString("naId")
+      .flatMap(naId => uri("http://catalog.archives.gov/id/" + naId))
       .getOrElse(throw ExtractorException("Couldn't load item url."))
 
   override def build(): Try[OreAggregation] = {
@@ -57,14 +58,14 @@ class NaraExtractor(rawData: String, shortName: String) extends Extractor with X
         originalRecord = rawData,
         provider = agent,
         isShownAt = uriOnlyWebResource(itemUri(xml)),
-        preview = extractString(xml \ "digitalObjectArray" \ "digitalObject" \ "thumbnailFilename").map(new URI(_)).map(uriOnlyWebResource)
+        preview = extractString(xml \ "digitalObjectArray" \ "digitalObject" \ "thumbnailFilename").flatMap((value: String) => uri(value)).map(uriOnlyWebResource)
       )
     }
   }
 
   def agent = EdmAgent(
     name = Some("National Archives and Records Administration"),
-    uri = Some(new URI("http://dp.la/api/contributor/nara"))
+    uri = uri("http://dp.la/api/contributor/nara")
   )
 
   def collection(xml: NodeSeq): Seq[String] = {

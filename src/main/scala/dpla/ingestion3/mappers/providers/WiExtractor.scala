@@ -58,7 +58,7 @@ class WiExtractor(rawData: String, shortName: String) extends Extractor with Xml
 
   def agent = EdmAgent(
     name = Some("Recollection Wisconsin"),
-    uri = Some(new URI("http://dp.la/api/contributor/wisconsin"))
+    uri = uri("http://dp.la/api/contributor/wisconsin")
   )
 
   def dataProvider(): ExactlyOne[EdmAgent] = {
@@ -71,7 +71,7 @@ class WiExtractor(rawData: String, shortName: String) extends Extractor with Xml
   // Get the second occurrence of the dc:identifier property
   def itemUri(): ExactlyOne[URI] = {
     extractString(xml \ "metadata" \\ "isShownAt") match {
-      case Some(uri) => new URI(uri)
+      case Some(uriString) => uri(uriString).getOrElse(throw new Exception("Missing required property isShownAt"))
       case None => throw new Exception("Missing required property isShownAt")
     }
   }

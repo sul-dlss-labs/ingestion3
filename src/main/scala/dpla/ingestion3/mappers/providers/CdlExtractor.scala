@@ -71,22 +71,20 @@ class CdlExtractor(rawData: String, shortName: String)
 
   def thumbnail(json: JValue): Option[EdmWebResource] =
     extractString("reference_image_md5")(json) match {
-      case Some(md5) => Some(
-        uriOnlyWebResource(
-          new URI("https://thumbnails.calisphere.org/clip/150x150/" + md5)
-        )
-      )
+      case Some(md5) =>
+        uri("https://thumbnails.calisphere.org/clip/150x150/" + md5)
+          .map(uriOnlyWebResource)
       case None => None
     }
 
   def agent = EdmAgent(
     name = Some("California Digital Library"),
-    uri = Some(new URI("http://dp.la/api/contributor/cdl"))
+    uri = uri("http://dp.la/api/contributor/cdl")
   )
 
   def providerUri(json: JValue): URI =
     extractString("url_item")(json) match {
-      case Some(url) => new URI(url)
+      case Some(url) => uri(url).getOrElse(throw new Exception("Unable to determine URL of item on provider's site"))
       case None => throw new Exception("Unable to determine URL of item on provider's site")
     }
 }
